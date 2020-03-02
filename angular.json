@@ -24,9 +24,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/bootstrap-4.4.1-dist/css/bootstrap.min.css",
+              "src/assets/mdb/css/mdb.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/bootstrap-4.4.1-dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -84,7 +88,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/assets/bootstrap-4.4.1-dist/css/bootstrap.min.css"
             ],
             "scripts": []
           }
