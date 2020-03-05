@@ -1,0 +1,15 @@
+.center-form {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  margin: auto;
+  padding-top: 100px;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li a {
+  font-size: 30px;
+}

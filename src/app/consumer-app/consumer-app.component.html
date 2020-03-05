@@ -1,0 +1,73 @@
+<hr/>
+<h2>Implementation: {{impl}}</h2>
+<hr/>
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-4">
+      Producer speed: <span>{{producerSpeedMsgPerSec}}</span> msg/sec
+      <input type="range" class="custom-range" id="customRange1" min="0" max="1000" [value]="producerSpeedMsgPerSec"
+             (input)="updateProducerSpeed($event.target.value)"/>
+    </div>
+
+    <div class="col-4"></div>
+
+    <div class="col-4">
+      Record processing duration: <span>{{recordProcessingDurationMs}}</span> ms
+      <input type="range" class="custom-range" id="customRange2" min="1" max="1000" [value]="recordProcessingDurationMs"
+             (input)="updateRecordProcessingDuration($event.target.value)"/>
+    </div>
+  </div>
+
+  <hr/>
+
+  <h3>poll method calls</h3>
+
+  <div class="row">
+    <div class="col-12" style="display: block;">
+      <canvas baseChart width="1200" height="100"
+              [datasets]="lineChartData"
+              [labels]="lineChartLabels"
+              [options]="lineChartOptions"
+              [colors]="lineChartColors"
+              [legend]="lineChartLegend"
+              [chartType]="lineChartType"
+      ></canvas>
+    </div>
+  </div>
+
+  <hr/>
+  <div class="row">
+    <div class="col-6">
+      <h3>Last poll records count: {{lastPollRecordsCount}}</h3>
+    </div>
+    <div class="col-6">
+      <h3>Tasks ({{workersData.length}})</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 workers">
+
+      <div *ngFor="let worker of workersData, let i = index" class="row">
+
+        <div class="col-1 text-right">{{i + 1}}.</div>
+        <div class="col-10">
+          <div class="progress" style="height: 20pt; font-size: 14pt">
+            <div class="progress-bar bg-info" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                 [ngStyle]="{'width': worker.getPercentage() + '%' }" [attr.aria-valuenow]="worker.getPercentage()">
+              {{worker.processedRecords}}
+            </div>
+          </div>
+        </div>
+        <div class="col-1 text-left">{{worker.totalRecords}}</div>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
