@@ -13,7 +13,8 @@ import {WorkerInfo} from './worker-info.model';
 })
 export class ConsumerAppComponent implements OnInit, OnDestroy {
 
-  private impl: string = null;
+  public consumerAppId: string = null;
+  public consumerAppType: string = null;
   private pollInfosFetchIntervalId = null;
   private consumingStateFetchIntervalId = null;
 
@@ -21,11 +22,10 @@ export class ConsumerAppComponent implements OnInit, OnDestroy {
     {data: [65, 59, 80, 81, 56, 55, 40], label: 'poll method calls'}
   ];
 
-  protected workersData: WorkerInfo[] = [];
+  public workersData: WorkerInfo[] = [];
 
-  protected lastPollRecordsCount: number = 0;
-  protected producerSpeedMsgPerSec: number = 0;
-  protected recordProcessingDurationMs: number = 0;
+  public lastPollRecordsCount: number = 0;
+  public recordProcessingDurationMs: number = 0;
 
   public lineChartLabels: Label[] = [];
 
@@ -69,61 +69,79 @@ export class ConsumerAppComponent implements OnInit, OnDestroy {
 
   @ViewChild(BaseChartDirective, {static: true}) chart: BaseChartDirective;
 
-  constructor(public route: ActivatedRoute, private consumerAppService: ConsumerAppService) {
+  constructor(private route: ActivatedRoute, private consumerAppService: ConsumerAppService) {
   }
 
 
   ngOnInit() {
 
     this.route.params.subscribe((customerParams: Params) => {
-      this.impl = customerParams.impl;
 
+      this.stopDataFetch();
+
+      this.consumerAppId = customerParams.id;
       this.pollInfosFetchIntervalId = setInterval(function(ev) {
         this.fetchPollInfo();
-      }.bind(this), 100);
+      }.bind(this), 50);
 
       this.consumingStateFetchIntervalId = setInterval(function(ev) {
         this.fetchConsumingStateData();
       }.bind(this), 20);
-
     });
 
+  }
+
+  private stopDataFetch() {
+    if (this.pollInfosFetchIntervalId) {
+      console.log('Clearing  pollInfosFetchIntervalId: ' + this.pollInfosFetchIntervalId);
+      clearInterval(this.pollInfosFetchIntervalId);
+    }
+
+    if (this.consumingStateFetchIntervalId) {
+      console.log('Clearing  pollInfosFetchIntervalId: ' + this.consumingStateFetchIntervalId);
+      clearInterval(this.consumingStateFetchIntervalId);
+    }
   }
 
   private fetchPollInfo() {
-    this.consumerAppService.fetchPollInfo().subscribe(pollInfos => {
-      let labels: Label[] = [];
-      let data = [];
-      let i = 0;
-      // console.log(pollInfos);
+    this.consumerAppService.fetchPollInfo(this.consumerAppId)
+      .subscribe(pollInfos => {
+        let labels: Label[] = [];
+        let data = [];
+        let i = 0;
+        // console.log(pollInfos);
 
-      for (const pollInfo of pollInfos) {
-        labels.push(i % 10 == 0 ? 'I' : '.');
-        data.push(pollInfo.pollCount);
-        i++;
-      }
-      this.lineChartLabels = labels;
-      this.lineChartData[0].data = data;
-    });
+        for (const pollInfo of pollInfos) {
+          labels.push(i % 10 == 0 ? 'I' : '.');
+          data.push(pollInfo.pollCount);
+          i++;
+        }
+        this.lineChartLabels = labels;
+        this.lineChartData[0].data = data;
+      });
   }
 
   private fetchConsumingStateData() {
-    this.consumerAppService.fetchConsumingStateData().subscribe(csd => {
-      this.workersData = csd.workerInfos.map(w => new WorkerInfo(w.totalRecords, w.processedRecords, w.threadName));
-      this.lastPollRecordsCount = csd.lastPollRecordsCount;
-      this.recordProcessingDurationMs = csd.recordProcessingDurationMs;
+    if (this.consumerAppId) {
+      this.consumerAppService.fetchConsumingStateData(this.consumerAppId).subscribe(csd => {
+        this.workersData = csd.workerInfos.map(w => new WorkerInfo(w.totalRecords, w.processedRecords, w.threadName));
+        this.lastPollRecordsCount = csd.lastPollRecordsCount;
+        this.recordProcessingDurationMs = csd.recordProcessingDurationMs;
+        this.consumerAppType = csd.consumerAppType.toLowerCase().replace('_', ' ');
+        // console.log(csd);
+      });
+    }
 
-      console.log(csd);
-    });
   }
+
 
   ngOnDestroy(): void {
-    clearInterval(this.pollInfosFetchIntervalId);
+    this.stopDataFetch();
   }
 
 
-  protected updateRecordProcessingDuration(durationMs: number) {
-    this.consumerAppService.updateRecordProcessingDuration(durationMs);
+  public updateRecordProcessingDuration(consumerAppId: string, durationMs: number) {
+    this.consumerAppService.updateRecordProcessingDuration(consumerAppId, durationMs);
   }
 
 

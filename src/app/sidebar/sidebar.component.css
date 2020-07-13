@@ -1,0 +1,15 @@
+.btn-icon {
+  padding: 2pt;
+  border-radius: 10pt;
+  width: 20pt;
+  background-color: lightblue;
+}
+
+h6 {
+  margin-top: 5pt;
+  margin-right: 5pt;
+}
+
+hr {
+  margin-top: 2pt !important;
+}

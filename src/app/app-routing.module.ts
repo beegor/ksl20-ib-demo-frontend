@@ -1,16 +1,16 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ConsumerAppComponent} from './consumer-app/consumer-app.component';
-import {ConsumerAppListComponent} from './consumer-app-list/consumer-app-list.component';
+import {HomeScreenComponent} from './home-screen/home-screen.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: ConsumerAppListComponent
+    component: HomeScreenComponent
   },
   {
-    path: 'consumer-app/:impl',
+    path: 'consumer-app/:id',
     component: ConsumerAppComponent
   }
 ];

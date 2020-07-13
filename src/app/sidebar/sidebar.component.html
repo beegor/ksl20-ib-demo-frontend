@@ -1,42 +1,86 @@
-<div>
+<a routerLink="/">
+  <img src="assets/kafka.jpg" height="60"/>
+</a>
 
-  <h3>Consumers</h3>
+<div style="margin-top: 20pt">
+
+  <h6 class="float-left">CONSUMERS</h6>
+  <button class="btn btn-sm btn-icon" (click)="open(startConsumer)">
+    <img src="assets/icon/plus-2x.png"/>
+  </button>
 
   <table class="table">
-    <tr *ngFor="let ca of consumerApps">
-      <td>Consumer {{ca.consumerAppId}} <br/> {{ca.implementation}}</td>
+    <tr style="background-color: #efefef" *ngFor="let ca of consumerApps">
+      <td>
+        <a routerLink="/consumer-app/{{ca.consumerAppId}}"><h5>Consumer {{ca.consumerAppId}} </h5></a>
+        {{ca.implementation.toLowerCase().replace("_", " ")}}
+      </td>
+      <td>
+        <button class="btn btn-sm btn-icon" (click)="stopConsumer(ca.consumerAppId)">
+          <img src="assets/icon/x.png"/>
+        </button>
+      </td>
     </tr>
   </table>
 
+</div>
+
+<div style="margin-top: 50pt">
+
+  <h6 class="float-left">PRODUCERS</h6>
+
+  <button class="btn btn-sm btn-icon" (click)="open(startProducerContent)">
+    <img src="assets/icon/plus-2x.png"/>
+  </button>
+
+  <table class="table">
+    <tr *ngFor="let prod of producers">
+      <td>
+        <h5>Producer {{prod.producerId}}</h5>
+        Speed: <span>{{prod.speedMsgPerSec}}</span> msg/sec
+        <input type="range" class="custom-range" id="customRange2" min="0" max="1000" [value]="prod.speedMsgPerSec"
+               (input)="updateRecordProcessingDuration(prod.producerId, $event.target.value)"/>
+      </td>
+    </tr>
+  </table>
 
 </div>
 
-<ng-template #content let-modal>
+<ng-template #startConsumer let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <h4 class="modal-title" id="modal-basic-title">Start consumer app</h4>
+    <button type="button" class="btn btn-danger" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form>
-      <div class="form-group">
-        <label for="dateOfBirth">Date of birth</label>
-        <div class="input-group">
-          <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <ul>
+      <li *ngFor="let impl of consumerAppTypes">
+        <a [routerLink]="" (click)="startConsuming(impl)"> {{impl}} </a>
+      </li>
+    </ul>
   </div>
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+
+<ng-template #startProducerContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-start-producer">Start producer</h4>
+    <button type="button" class="btn btn-danger" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label>Topic: </label>
+      <input class="form-control" type="text" [(ngModel)]="produceTopic"/>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success float-right" (click)="startProducer()">Start</button>
+  </div>
+</ng-template>
+
 
 <hr>
 

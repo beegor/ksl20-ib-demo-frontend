@@ -5,25 +5,27 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {ConsumerAppComponent} from './consumer-app/consumer-app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {ConsumerAppListComponent} from './consumer-app-list/consumer-app-list.component';
 
 import {ChartsModule} from 'ng2-charts';
 import {SidebarComponent} from './sidebar/sidebar.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HomeScreenComponent} from './home-screen/home-screen.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConsumerAppComponent,
-    ConsumerAppListComponent,
-    SidebarComponent
+    SidebarComponent,
+    HomeScreenComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     ChartsModule,
-    NgbModule
+    NgbModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

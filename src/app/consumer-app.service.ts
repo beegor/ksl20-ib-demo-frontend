@@ -25,24 +25,29 @@ export class ConsumerAppService {
     return this.http.get<ConsumerAppInfo[]>(fullUrl);
   }
 
-  public startConsumerApp(appType: string): Observable<any> {
+  public startConsumerApp(appType: string): Observable<ConsumerAppInfo> {
     const fullUrl = environment.consumerAppBaseUrl + '/start?impl=' + appType;
-    return this.http.get<any>(fullUrl);
+    return this.http.get<ConsumerAppInfo>(fullUrl);
   }
 
-  public fetchPollInfo(): Observable<PollInfo[]> {
-    const fullUrl = environment.consumerAppBaseUrl + '/poll-history';
+  public stopConsumerApp(appId: string): Observable<ConsumerAppInfo> {
+    const fullUrl = environment.consumerAppBaseUrl + '/stop/' + appId;
+    return this.http.get<ConsumerAppInfo>(fullUrl);
+  }
+
+  public fetchPollInfo(consumerAppId: string): Observable<PollInfo[]> {
+    const fullUrl = environment.consumerAppBaseUrl + '/poll-history/' + consumerAppId;
     return this.http.get<PollInfo[]>(fullUrl);
   }
 
-  public fetchConsumingStateData(): Observable<ConsumingStateData> {
-    const fullUrl = environment.consumerAppBaseUrl + '/state-data';
+  public fetchConsumingStateData(consumerAppId: string): Observable<ConsumingStateData> {
+    const fullUrl = environment.consumerAppBaseUrl + '/state/' + consumerAppId;
     return this.http.get<ConsumingStateData>(fullUrl);
   }
 
 
-  public updateRecordProcessingDuration(durationMs) {
-    const fullUrl = environment.consumerAppBaseUrl + '/record-processing-duration-set?durationMs=' + durationMs;
+  public updateRecordProcessingDuration(consumerAppId: string, durationMs) {
+    const fullUrl = environment.consumerAppBaseUrl + '/record-processing-duration-set/' + consumerAppId + '?durationMs=' + durationMs;
     return this.http.get<boolean>(fullUrl).subscribe(result => {
     });
   }

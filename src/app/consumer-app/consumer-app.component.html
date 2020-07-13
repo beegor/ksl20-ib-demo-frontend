@@ -1,23 +1,14 @@
-<hr/>
-<h2>Implementation: {{impl}}</h2>
-<hr/>
-
-
 <div class="container">
 
   <div class="row">
-    <div class="col-4">
-      Producer speed: <span>{{producerSpeedMsgPerSec}}</span> msg/sec
-      <input type="range" class="custom-range" id="customRange1" min="0" max="1000" [value]="producerSpeedMsgPerSec"
-             (input)="updateProducerSpeed($event.target.value)"/>
+    <div class="col-8">
+      <h2>Consumer {{consumerAppId}} [{{consumerAppType}}]</h2>
     </div>
-
-    <div class="col-4"></div>
 
     <div class="col-4">
       Record processing duration: <span>{{recordProcessingDurationMs}}</span> ms
       <input type="range" class="custom-range" id="customRange2" min="1" max="1000" [value]="recordProcessingDurationMs"
-             (input)="updateRecordProcessingDuration($event.target.value)"/>
+             (input)="updateRecordProcessingDuration(consumerAppId, $event.target.value)"/>
     </div>
   </div>
 
